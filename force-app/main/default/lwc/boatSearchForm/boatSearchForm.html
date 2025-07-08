@@ -2,7 +2,14 @@
   <h2>Boat Search Form</h2>
   <lightning-layout>
     <lightning-layout-item class="slds-align-middle">
-      <lightning-combobox class="slds-align-middle"></lightning-combobox>
+      <lightning-combobox
+        class="slds-align-middle"
+        value={selectedBoatTypeId}
+        options={searchOptions}
+        onchange={handleSearchOptionChange}
+      >
+      </lightning-combobox>
+      <p>Selected {selectedBoatTypeId}</p>
     </lightning-layout-item>
   </lightning-layout>
 </template>
