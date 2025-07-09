@@ -1,3 +1,12 @@
 <template>
-  <h2>Boat Search Results</h2>
+  <div>
+    <h2>Boat Search Results</h2>
+    <ul>
+      <template for:each={boats} for:item="boat">
+        <lightning-card title={boat.Name} key={boat.Id}>
+          <p class="slds-p-horizontal_small">{boat.Description__c}</p>
+        </lightning-card>
+      </template>
+    </ul>
+  </div>
 </template>

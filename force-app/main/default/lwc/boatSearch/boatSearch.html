@@ -5,14 +5,18 @@
       <lightning-card title="Find a Boat">
         <!-- New Boat button goes here -->
         <p class="slds-var-p-horizontal_small">
-          <c-boat-search-form></c-boat-search-form>
+          <c-boat-search-form onsearch={searchBoats}></c-boat-search-form>
         </p>
       </lightning-card>
     </lightning-layout-item>
     <!-- Bottom -->
     <lightning-layout-item size="12" class="slds-p-top_small slds-is-relative">
-      <lightning-spinner alternative-text="Loading"></lightning-spinner>
-      <c-boat-search-results></c-boat-search-results>
+      <template lwc:if={isLoading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+      </template>
+      <template lwc:else>
+        <c-boat-search-results boats={boats}></c-boat-search-results>
+      </template>
       <!-- onloading={handleLoading} ondoneloading={handleDoneLoading} -->
     </lightning-layout-item>
   </lightning-layout>
