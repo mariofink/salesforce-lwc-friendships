@@ -1,12 +1,19 @@
 <template>
   <div>
     <h2>Boat Search Results</h2>
-    <ul>
+    <lightning-layout horizontal-align="center" multiple-rows>
       <template for:each={boats} for:item="boat">
-        <lightning-card title={boat.Name} key={boat.Id}>
-          <p class="slds-p-horizontal_small">{boat.Description__c}</p>
-        </lightning-card>
+        <lightning-layout-item
+          padding="around-small"
+          key={boat.Id}
+          size="12"
+          small-device-size="6"
+          medium-device-size="4"
+          large-device-size="3"
+        >
+          <c-boat-tile boat={boat}></c-boat-tile>
+        </lightning-layout-item>
       </template>
-    </ul>
+    </lightning-layout>
   </div>
 </template>
