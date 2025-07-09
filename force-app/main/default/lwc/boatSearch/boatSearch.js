@@ -1,11 +1,30 @@
 import { LightningElement, wire } from "lwc";
+import { subscribe, MessageContext } from "lightning/messageService";
+import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
 import getBoats from "@salesforce/apex/BoatDataService.getBoats";
 
 export default class BoatSearch extends LightningElement {
   isLoading = false;
   boatTypeId = "";
-
+  selectedBoatId = null;
   boats = [];
+  subscription = null;
+
+  @wire(MessageContext)
+  messageContext;
+
+  connectedCallback() {
+    if (!this.subscription) {
+      this.subscription = subscribe(this.messageContext, BOATMC, (message) =>
+        this.handleMessage(message)
+      );
+    }
+  }
+
+  handleMessage(message) {
+    console.log("BoatSearch: handleMessage", message);
+    this.selectedBoatId = message.recordId;
+  }
 
   // Handles loading event
   handleLoading() {

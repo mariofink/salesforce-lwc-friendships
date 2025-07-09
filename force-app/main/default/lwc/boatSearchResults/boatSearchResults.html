@@ -11,7 +11,11 @@
           medium-device-size="4"
           large-device-size="3"
         >
-          <c-boat-tile boat={boat}></c-boat-tile>
+          <c-boat-tile
+            boat={boat}
+            selected-boat-id={selectedBoatId}
+            onboatselect={handleBoatSelected}
+          ></c-boat-tile>
         </lightning-layout-item>
       </template>
     </lightning-layout>

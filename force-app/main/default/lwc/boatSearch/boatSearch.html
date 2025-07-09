@@ -15,9 +15,11 @@
         <lightning-spinner alternative-text="Loading"></lightning-spinner>
       </template>
       <template lwc:else>
-        <c-boat-search-results boats={boats}></c-boat-search-results>
+        <c-boat-search-results
+          boats={boats}
+          selected-boat-id={selectedBoatId}
+        ></c-boat-search-results>
       </template>
-      <!-- onloading={handleLoading} ondoneloading={handleDoneLoading} -->
     </lightning-layout-item>
   </lightning-layout>
 </template>
