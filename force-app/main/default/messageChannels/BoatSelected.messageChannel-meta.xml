@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
-    <masterLabel>BoatMessageChannel</masterLabel>
-    <description
-  >This is a sample Lightning Message Channel for the Lightning Web Components Superbadge.</description>
+    <masterLabel>BoatSelected</masterLabel>
+    <description>Triggered when a boat gets selected.</description>
     <isExposed>true</isExposed>
     <lightningMessageFields>
-        <description>This is the record Id that changed</description>
+        <description>Id of the selected boat.</description>
         <fieldName>recordId</fieldName>
     </lightningMessageFields>
 </LightningMessageChannel>
