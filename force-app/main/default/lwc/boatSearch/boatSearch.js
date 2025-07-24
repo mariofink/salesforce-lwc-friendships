@@ -1,7 +1,10 @@
 import { LightningElement, wire } from "lwc";
 import { subscribe, MessageContext } from "lightning/messageService";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import BOAT_SELECTED_CHANNEL from "@salesforce/messageChannel/BoatSelected__c";
+import BOATS_UPDATED_CHANNEL from "@salesforce/messageChannel/BoatsUpdated__c";
 import getBoats from "@salesforce/apex/BoatDataService.getBoats";
+import updateBoatList from "@salesforce/apex/BoatDataService.updateBoatList";
 
 export default class BoatSearch extends LightningElement {
   isLoading = false;
@@ -9,6 +12,7 @@ export default class BoatSearch extends LightningElement {
   selectedBoatId = null;
   boats = [];
   subscription = null;
+  boatsUpdatedSubscription = null;
 
   @wire(MessageContext)
   messageContext;
@@ -21,6 +25,18 @@ export default class BoatSearch extends LightningElement {
         (message) => this.handleMessage(message)
       );
     }
+    if (!this.boatsUpdatedSubscription) {
+      this.boatsUpdatedSubscription = subscribe(
+        this.messageContext,
+        BOATS_UPDATED_CHANNEL,
+        (message) => this.handleBoatsUpdated(message)
+      );
+    }
+  }
+
+  handleBoatsUpdated(message) {
+    console.log("BoatSearch: handleBoatsUpdated", message);
+    this.updateBoats(message.boatsToUpdate);
   }
 
   handleMessage(message) {
@@ -57,4 +73,38 @@ export default class BoatSearch extends LightningElement {
   }
 
   createNewBoat() {}
+
+  // Method to update boat list
+  async updateBoats(boatsToUpdate) {
+    console.log("⛵️ BoatSearch: updateBoats", boatsToUpdate);
+    try {
+      this.handleLoading();
+
+      // Call the Apex method
+      const result = await updateBoatList({ data: boatsToUpdate });
+
+      // Show success message
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "Success",
+          message: result,
+          variant: "success"
+        })
+      );
+
+      // Optionally refresh the boat list after update
+      // You might want to refresh the wired data or dispatch an event
+    } catch (error) {
+      // Handle errors
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "Error updating boats",
+          message: error.body?.message || error.message,
+          variant: "error"
+        })
+      );
+    } finally {
+      this.handleDoneLoading();
+    }
+  }
 }

@@ -1,6 +1,7 @@
 <template>
   <lightning-tabset variant="scoped">
     <lightning-tab label="Gallery">
+      <!-- TODO: Move this to separate boatGallery component -->
       <div class="slds-scrollable_y">
         <lightning-layout horizontal-align="center" multiple-rows>
           <template for:each={boats} for:item="boat">
@@ -22,7 +23,17 @@
         </lightning-layout>
       </div>
     </lightning-tab>
-    <lightning-tab label="Boat Editor">Boat editor goes here.</lightning-tab>
+    <lightning-tab label="Boat Editor">
+      <div class="slds-scrollable_y">
+        <lightning-datatable
+          key-field="Id"
+          data={boats}
+          columns={columns}
+          onsave={handleSave}
+        >
+        </lightning-datatable>
+      </div>
+    </lightning-tab>
     <lightning-tab label="Boats Near Me">Boat Map goes here.</lightning-tab>
   </lightning-tabset>
 </template>

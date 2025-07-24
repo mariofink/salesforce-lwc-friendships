@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>BoatsUpdated</masterLabel>
+    <description>Triggered when boats are updated.</description>
+    <isExposed>true</isExposed>
+    <lightningMessageFields>
+        <description>Ids of the updated boats.</description>
+        <fieldName>boatsToUpdate</fieldName>
+    </lightningMessageFields>
+</LightningMessageChannel>
