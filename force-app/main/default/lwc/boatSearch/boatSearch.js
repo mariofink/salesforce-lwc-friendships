@@ -1,7 +1,7 @@
 import { LightningElement, wire, track } from "lwc";
 import { subscribe, MessageContext } from "lightning/messageService";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import BOAT_SELECTED_CHANNEL from "@salesforce/messageChannel/BoatSelected__c";
+import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
 import BOATS_UPDATED_CHANNEL from "@salesforce/messageChannel/BoatsUpdated__c";
 import getBoats from "@salesforce/apex/BoatDataService.getBoats";
 import updateBoatList from "@salesforce/apex/BoatDataService.updateBoatList";
@@ -19,10 +19,8 @@ export default class BoatSearch extends LightningElement {
 
   connectedCallback() {
     if (!this.subscription) {
-      this.subscription = subscribe(
-        this.messageContext,
-        BOAT_SELECTED_CHANNEL,
-        (message) => this.handleBoatSelected(message)
+      this.subscription = subscribe(this.messageContext, BOATMC, (message) =>
+        this.handleBoatSelected(message)
       );
     }
     if (!this.boatsUpdatedSubscription) {

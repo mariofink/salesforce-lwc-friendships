@@ -1,6 +1,6 @@
 import { LightningElement, api, wire } from "lwc";
 import { MessageContext, publish } from "lightning/messageService";
-import BOAT_SELECTED_CHANNEL from "@salesforce/messageChannel/BoatSelected__c";
+import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
 import BOATS_UPDATED_CHANNEL from "@salesforce/messageChannel/BoatsUpdated__c";
 
 export default class BoatSearchResults extends LightningElement {
@@ -21,7 +21,7 @@ export default class BoatSearchResults extends LightningElement {
   messageContext;
 
   handleBoatSelected(event) {
-    publish(this.messageContext, BOAT_SELECTED_CHANNEL, {
+    publish(this.messageContext, BOATMC, {
       recordId: event.detail.boatId
     });
   }

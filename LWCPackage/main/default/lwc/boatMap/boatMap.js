@@ -1,8 +1,8 @@
-import { LightningElement, wire, track } from "lwc";
-import { subscribe, MessageContext } from "lightning/messageService";
-
-import BOAT_SELECTED_CHANNEL from "@salesforce/messageChannel/BoatSelected__c";
+import { LightningElement, api, wire } from "lwc";
 import { getRecord } from "lightning/uiRecordApi";
+// import BOATMC from the message channel
+import { subscribe, MessageContext } from "lightning/messageService";
+import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
 
 const LONGITUDE_FIELD = "Boat__c.Geolocation__Longitude__s";
 const LATITUDE_FIELD = "Boat__c.Geolocation__Latitude__s";
@@ -11,13 +11,14 @@ const BOAT_FIELDS = [LONGITUDE_FIELD, LATITUDE_FIELD];
 export default class BoatMap extends LightningElement {
   // private
   subscription = null;
-  @track boatId;
+  boatId;
 
   @wire(MessageContext)
   messageContext;
 
   // Getter and Setter to allow for logic to run on recordId change
   // this getter must be public
+  @api
   get recordId() {
     return this.boatId;
   }
@@ -58,7 +59,7 @@ export default class BoatMap extends LightningElement {
     // Subscribe to the message channel to retrieve the recordId and explicitly assign it to boatId.
     this.subscription = subscribe(
       this.messageContext,
-      BOAT_SELECTED_CHANNEL,
+      BOATMC,
       (message) => (this.boatId = message.recordId)
     );
   }
