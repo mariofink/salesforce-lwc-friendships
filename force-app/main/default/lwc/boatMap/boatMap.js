@@ -1,12 +1,23 @@
 // import BOATMC from the message channel
+import { LightningElement, wire, track } from "lwc";
+import { subscribe, MessageContext } from "lightning/messageService";
 
-// Declare the const LONGITUDE_FIELD for the boat's Longitude__s
-// Declare the const LATITUDE_FIELD for the boat's Latitude
-// Declare the const BOAT_FIELDS as a list of [LONGITUDE_FIELD, LATITUDE_FIELD];
+import BOAT_SELECTED_CHANNEL from "@salesforce/messageChannel/BoatSelected__c";
+import { getRecord } from "lightning/uiRecordApi";
+
+const LONGITUDE_FIELD = "Boat__c.Geolocation__Longitude__s";
+const LATITUDE_FIELD = "Boat__c.Geolocation__Latitude__s";
+const BOAT_FIELDS = [LONGITUDE_FIELD, LATITUDE_FIELD];
+
+console.log("🏴‍☠️ BOATMAP");
+
 export default class BoatMap extends LightningElement {
   // private
   subscription = null;
-  boatId;
+  @track boatId;
+
+  @wire(MessageContext)
+  messageContext;
 
   // Getter and Setter to allow for logic to run on recordId change
   // this getter must be public
@@ -14,7 +25,7 @@ export default class BoatMap extends LightningElement {
     return this.boatId;
   }
   set recordId(value) {
-    this.setAttribute('boatId', value);
+    this.setAttribute("boatId", value);
     this.boatId = value;
   }
 
@@ -25,7 +36,9 @@ export default class BoatMap extends LightningElement {
 
   // Getting record's location to construct map markers using recordId
   // Wire the getRecord method using ('$boatId')
+  @wire(getRecord, { recordId: "$boatId", fields: BOAT_FIELDS })
   wiredRecord({ error, data }) {
+    console.log("🏴‍☠️ BOATMAP: wiredRecord", { error, data });
     // Error handling
     if (data) {
       this.error = undefined;
@@ -47,6 +60,11 @@ export default class BoatMap extends LightningElement {
       return;
     }
     // Subscribe to the message channel to retrieve the recordId and explicitly assign it to boatId.
+    this.subscription = subscribe(
+      this.messageContext,
+      BOAT_SELECTED_CHANNEL,
+      (message) => (this.boatId = message.recordId)
+    );
   }
 
   // Calls subscribeMC()
