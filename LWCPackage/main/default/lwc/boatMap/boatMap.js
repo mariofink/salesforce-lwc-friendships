@@ -1,4 +1,3 @@
-// import BOATMC from the message channel
 import { LightningElement, wire, track } from "lwc";
 import { subscribe, MessageContext } from "lightning/messageService";
 
