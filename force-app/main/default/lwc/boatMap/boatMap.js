@@ -9,8 +9,6 @@ const LONGITUDE_FIELD = "Boat__c.Geolocation__Longitude__s";
 const LATITUDE_FIELD = "Boat__c.Geolocation__Latitude__s";
 const BOAT_FIELDS = [LONGITUDE_FIELD, LATITUDE_FIELD];
 
-console.log("🏴‍☠️ BOATMAP");
-
 export default class BoatMap extends LightningElement {
   // private
   subscription = null;
@@ -38,7 +36,6 @@ export default class BoatMap extends LightningElement {
   // Wire the getRecord method using ('$boatId')
   @wire(getRecord, { recordId: "$boatId", fields: BOAT_FIELDS })
   wiredRecord({ error, data }) {
-    console.log("🏴‍☠️ BOATMAP: wiredRecord", { error, data });
     // Error handling
     if (data) {
       this.error = undefined;
@@ -73,7 +70,16 @@ export default class BoatMap extends LightningElement {
   }
 
   // Creates the map markers array with the current boat's location for the map.
-  updateMap(Longitude, Latitude) {}
+  updateMap(Longitude, Latitude) {
+    this.mapMarkers = [
+      {
+        location: {
+          Longitude: Longitude,
+          Latitude: Latitude
+        }
+      }
+    ];
+  }
 
   // Getter method for displaying the map component, or a helper method.
   get showMap() {

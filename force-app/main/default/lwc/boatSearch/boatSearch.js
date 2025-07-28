@@ -5,22 +5,11 @@ import BOAT_SELECTED_CHANNEL from "@salesforce/messageChannel/BoatSelected__c";
 import BOATS_UPDATED_CHANNEL from "@salesforce/messageChannel/BoatsUpdated__c";
 import getBoats from "@salesforce/apex/BoatDataService.getBoats";
 import updateBoatList from "@salesforce/apex/BoatDataService.updateBoatList";
-import { getRecord } from "lightning/uiRecordApi";
-import BOAT_NAME_FIELD from "@salesforce/schema/Boat__c.Name";
-import BOAT_GEOLOCATION_FIELD from "@salesforce/schema/Boat__c.Geolocation__c";
-import BOAT_LENGTH_FIELD from "@salesforce/schema/Boat__c.Length__c";
-
-const BOAT_FIELDS = [
-  BOAT_NAME_FIELD,
-  BOAT_LENGTH_FIELD
-  // BOAT_GEOLOCATION_FIELD // When adding this field this will result in an exception from the getRecord call: adapter-unfullfilled-error
-];
 
 export default class BoatSearch extends LightningElement {
   isLoading = false;
   boatTypeId = "";
   @track selectedBoatId = "";
-  selectedBoat = null;
   boats = [];
   subscription = null;
   boatsUpdatedSubscription = null;
@@ -46,16 +35,10 @@ export default class BoatSearch extends LightningElement {
   }
 
   handleBoatsUpdated(message) {
-    console.log("BoatSearch: handleBoatsUpdated", message);
     this.updateBoats(message.boatsToUpdate);
   }
 
   handleBoatSelected(message) {
-    console.log(
-      "BoatSearch: handleBoatSelected",
-      message,
-      JSON.parse(JSON.stringify(BOAT_FIELDS))
-    );
     this.selectedBoatId = message.recordId;
   }
 
@@ -85,22 +68,6 @@ export default class BoatSearch extends LightningElement {
       this.boats = [];
     }
     this.handleDoneLoading();
-  }
-
-  @wire(getRecord, { recordId: "$selectedBoatId", fields: BOAT_FIELDS })
-  wiredRecord({ error, data }) {
-    console.log("⛵️ BoatSearch: wiredSelectedBoatRecord", {
-      error,
-      data,
-      selectedBoatId: this.selectedBoatId
-    });
-
-    if (data) {
-      console.log("⛵️ BoatSearch: Geolocation retrieved", data);
-      this.selectedBoat = data.fields;
-    } else if (error) {
-      console.error("⛵️ BoatSearch: Error retrieving boat record", error);
-    }
   }
 
   createNewBoat() {}
