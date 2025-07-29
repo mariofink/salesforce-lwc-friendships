@@ -8,16 +8,26 @@
         <target>lightning__HomePage</target>
     </targets>
     <targetConfigs>
-        <targetConfig
-      targets="lightning__RecordPage,lightning__AppPage,lightning__HomePage"
-    >
+        <targetConfig targets="lightning__AppPage">
             <property
         name="similarBy"
         type="String"
         default="Type"
-        label="Similar Boats Criteria"
-        description="Enter Type, Price, or Length to compare similar boats by"
+        label="Enter the property you want to compare by"
+        datasource="Type,Price,Length"
       />
+        </targetConfig>
+        <targetConfig targets="lightning__RecordPage">
+            <property
+        name="similarBy"
+        type="String"
+        default="Type"
+        label="Enter the property you want to compare by"
+        datasource="Type,Price,Length"
+      />
+      <objects>
+        <object>Boat__c</object>
+      </objects>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
