@@ -1,9 +1,10 @@
 import { LightningElement, wire, track } from "lwc";
 import { subscribe, MessageContext } from "lightning/messageService";
+import { NavigationMixin } from "lightning/navigation";
 import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
 import BOATS_UPDATED_CHANNEL from "@salesforce/messageChannel/BoatsUpdated__c";
 
-export default class BoatSearch extends LightningElement {
+export default class BoatSearch extends NavigationMixin(LightningElement) {
   isLoading = false;
   boatTypeId = "";
   @track selectedBoatId = "";
@@ -39,13 +40,11 @@ export default class BoatSearch extends LightningElement {
 
   // Handles loading event
   handleLoading() {
-    console.log("✅ Loading");
     this.isLoading = true;
   }
 
   // Handles done loading event
   handleDoneLoading() {
-    console.log("❌ Done loading");
     this.isLoading = false;
   }
 
@@ -55,5 +54,13 @@ export default class BoatSearch extends LightningElement {
     this.template.querySelector("c-boat-search-results").searchBoats(boatType);
   }
 
-  createNewBoat() {}
+  createNewBoat() {
+    this[NavigationMixin.Navigate]({
+      type: "standard__objectPage",
+      attributes: {
+        objectApiName: "Boat__c",
+        actionName: "new"
+      }
+    });
+  }
 }
