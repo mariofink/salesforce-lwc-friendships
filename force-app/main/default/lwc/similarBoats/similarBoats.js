@@ -2,8 +2,9 @@ import { LightningElement, api, wire } from "lwc";
 import getSimilarBoats from "@salesforce/apex/BoatDataService.getSimilarBoats";
 import { subscribe, MessageContext } from "lightning/messageService";
 import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
+import { NavigationMixin } from "lightning/navigation";
 
-export default class SimilarBoats extends LightningElement {
+export default class SimilarBoats extends NavigationMixin(LightningElement) {
   // Private
   relatedBoats;
   boatId;
@@ -61,5 +62,15 @@ export default class SimilarBoats extends LightningElement {
   }
 
   // Navigate to record page
-  openBoatDetailPage(event) {}
+  openBoatDetailPage(event) {
+    this.selectedBoatId = event.detail.boatId;
+    // View a custom object record.
+    this[NavigationMixin.Navigate]({
+      type: "standard__recordPage",
+      attributes: {
+        recordId: this.selectedBoatId,
+        actionName: "view"
+      }
+    });
+  }
 }
