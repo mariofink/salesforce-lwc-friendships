@@ -25,7 +25,7 @@ export default class SimilarBoats extends NavigationMixin(LightningElement) {
     );
   }
 
-  // public
+  @api
   get recordId() {
     return this.boatId;
   }
