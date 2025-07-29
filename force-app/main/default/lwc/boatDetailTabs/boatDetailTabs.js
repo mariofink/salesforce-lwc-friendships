@@ -1,33 +1,22 @@
-import { LightningElement, api, wire } from "lwc";
+import { LightningElement, wire } from "lwc";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import { NavigationMixin } from "lightning/navigation";
 
 import {
   subscribe,
-  unsubscribe,
   APPLICATION_SCOPE,
   MessageContext
 } from "lightning/messageService";
 import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
 
 // Custom Labels Imports
-// import labelDetails for Details
 import labelDetails from "@salesforce/label/c.Details";
-// import labelReviews for Reviews
 import labelReviews from "@salesforce/label/c.Reviews";
-// import labelAddReview for Add_Review
 import labelAddReview from "@salesforce/label/c.Add_Review";
-// import labelFullDetails for Full_Details
 import labelFullDetails from "@salesforce/label/c.Full_Details";
-// import labelPleaseSelectABoat for Please_select_a_boat
 import labelPleaseSelectABoat from "@salesforce/label/c.Please_select_a_boat";
 
-// Boat__c Schema Imports
-import BOAT_OBJECT from "@salesforce/schema/Boat__c";
-
-// import BOAT_ID_FIELD for the Boat Id
 import BOAT_ID_FIELD from "@salesforce/schema/Boat__c.Id";
-// import BOAT_NAME_FIELD for the boat Name
 import BOAT_NAME_FIELD from "@salesforce/schema/Boat__c.Name";
 
 import BOAT_TYPE from "@salesforce/schema/Boat__c.BoatType__c";
@@ -42,6 +31,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
   boatLength = BOAT_LENGTH;
   boatPrice = BOAT_PRICE;
   boatDescription = BOAT_DESCRIPTION;
+
   @wire(getRecord, { recordId: "$boatId", fields: BOAT_FIELDS })
   wiredRecord;
 
@@ -58,9 +48,8 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
   get detailsTabIconName() {
     if (this.wiredRecord.data) {
       return "utility:anchor";
-    } else {
-      return null;
     }
+    return null;
   }
 
   @wire(MessageContext)
