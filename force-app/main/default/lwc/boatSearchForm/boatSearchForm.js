@@ -29,7 +29,7 @@ export default class BoatSearchForm extends LightningElement {
     const searchEvent = new CustomEvent("search", {
       detail: { boatTypeId: this.selectedBoatTypeId }
     });
-    console.log("BoatSearchForm: handleSearchOptionChange", searchEvent.detail);
+    console.log("BoatSearchForm: handleSearchOptionChange", searchEvent);
     this.dispatchEvent(searchEvent);
   }
 }

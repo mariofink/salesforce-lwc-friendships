@@ -11,15 +11,18 @@
     </lightning-layout-item>
     <!-- Bottom -->
     <lightning-layout-item size="12" class="slds-p-top_small slds-is-relative">
-      <template lwc:if={isLoading}>
-        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+      <template if:true={isLoading}>
+        <lightning-spinner
+          variant="brand"
+          size="large"
+          alternative-text="Loading"
+        >
+        </lightning-spinner>
       </template>
-      <template lwc:else>
-        <c-boat-search-results
-          boats={boats}
-          selected-boat-id={selectedBoatId}
-        ></c-boat-search-results>
-      </template>
+      <c-boat-search-results
+        onloading={handleLoading}
+        ondoneloading={handleDoneLoading}
+      ></c-boat-search-results>
     </lightning-layout-item>
   </lightning-layout>
 </template>

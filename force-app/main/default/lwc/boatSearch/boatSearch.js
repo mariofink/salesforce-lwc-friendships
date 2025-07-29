@@ -1,10 +1,7 @@
 import { LightningElement, wire, track } from "lwc";
 import { subscribe, MessageContext } from "lightning/messageService";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import BOATMC from "@salesforce/messageChannel/BoatMessageChannel__c";
 import BOATS_UPDATED_CHANNEL from "@salesforce/messageChannel/BoatsUpdated__c";
-import getBoats from "@salesforce/apex/BoatDataService.getBoats";
-import updateBoatList from "@salesforce/apex/BoatDataService.updateBoatList";
 
 export default class BoatSearch extends LightningElement {
   isLoading = false;
@@ -42,65 +39,21 @@ export default class BoatSearch extends LightningElement {
 
   // Handles loading event
   handleLoading() {
+    console.log("✅ Loading");
     this.isLoading = true;
   }
 
   // Handles done loading event
   handleDoneLoading() {
+    console.log("❌ Done loading");
     this.isLoading = false;
   }
 
-  // Handles search boat event
-  // This custom event comes from the form
+  // Custom event triggered by boatSearchForm
   searchBoats(event) {
-    this.handleLoading();
-    this.boatTypeId = event.detail.boatTypeId;
-  }
-
-  @wire(getBoats, { boatTypeId: "$boatTypeId" })
-  wiredBoats({ error, data }) {
-    console.log("⛵️ BoatSearch: wiredBoats", { error, data });
-    if (data) {
-      this.boats = data;
-    } else if (error) {
-      this.boats = [];
-    }
-    this.handleDoneLoading();
+    const boatType = event.detail.boatTypeId;
+    this.template.querySelector("c-boat-search-results").searchBoats(boatType);
   }
 
   createNewBoat() {}
-
-  // Method to update boat list
-  async updateBoats(boatsToUpdate) {
-    console.log("⛵️ BoatSearch: updateBoats", boatsToUpdate);
-    try {
-      this.handleLoading();
-
-      // Call the Apex method
-      const result = await updateBoatList({ data: boatsToUpdate });
-
-      // Show success message
-      this.dispatchEvent(
-        new ShowToastEvent({
-          title: "Success",
-          message: result,
-          variant: "success"
-        })
-      );
-
-      // Optionally refresh the boat list after update
-      // You might want to refresh the wired data or dispatch an event
-    } catch (error) {
-      // Handle errors
-      this.dispatchEvent(
-        new ShowToastEvent({
-          title: "Error updating boats",
-          message: error.body?.message || error.message,
-          variant: "error"
-        })
-      );
-    } finally {
-      this.handleDoneLoading();
-    }
-  }
 }
